@@ -25,7 +25,6 @@ int main()
     //roots are the points on which the line meets the x intercept in real quadratics
     //but the actual x point is = -b/2a
     quadratic(a,b,c,&delta,  &root1, &root2, &complexAnswer);
-    int x = (b*-1)/(2*a);
     
     if(complexAnswer==false && a != 0){
         std::cout << "\nRoot 1: " << root1 << "\nRoot 2: " << root2;
@@ -36,22 +35,26 @@ int main()
     }
     
     //graph
-    
     //initialize with error checking
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
     }
+    const int windowHeight = 480;
+    const int windowWidth = 640;
     
     //creates window and renderer with error checking
-    if (SDL_CreateWindowAndRenderer(640, 480, 0, &window, &renderer) != 0) {
+    if (SDL_CreateWindowAndRenderer(windowWidth, windowHeight, 0, &window, &renderer) != 0) {
         std::cout << "Window/Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
     }
     SDL_SetWindowTitle(window,"Quadratic Graph");
     SDL_RenderSetScale(renderer, 1.0, 1.0);
+    
+    
     // Set background color to black
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    
     //Grid, lets me use the alpha value to make grid opaque 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     for(int i = 1; i <=25; i++){
@@ -63,25 +66,37 @@ int main()
     SDL_RenderDrawLine(renderer, 0, 480/2, 640, 480/2);
     SDL_RenderDrawLine(renderer, 640/2, 0, 640/2, 480);
     
+    
     //makes a map to make pixels relative to points on graph
     std::map<float,float> coordinatesX;
     std::map<float,float> coordinatesY;
     //x
-    for(float i = -12.0f; i <= 25.0f; i+=0.1f){
+    for(float i = -12.0f; i <= 25.0f; i+=0.5f){
         coordinatesX[i] = (24.65*i)+(24.65*13);
     }
-    int counter=0;
-    for(int i = 9; i >= -9; i--){
+    //y
+    float counter=0;
+    for(float i = 9.0f; i >= -9.0f; i-=0.5f){
         coordinatesY[i] = (26.7*counter);
-        counter++;
+        counter+= 0.5f;
     }
     
-    SDL_SetRenderDrawColor(renderer, 255,0,0,255);
-    thickPoint(renderer, coordinatesX[10], coordinatesY[2]);
-    std::cout << coordinatesX[10];
-    for(float i = -12.0f; i <= 25.0f; i+=0.1f){
-        std::cout << i << ": "<< coordinatesX[i] << "  "<< std::endl;
+    
+    //draws quadratic
+    SDL_SetRenderDrawColor(renderer, 0,255,0,255);
+    int h = (b*-1)/(2*a);
+    int k = (a*(pow(h,2)))+(b*h)+c;
+    if(a > 0){
+        thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
+        std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
+        for(float i=root1; i < windowHeight; i+=0.5f){
+            
+        }
     }
+    if(a < 0){
+        
+    }
+    
     
     //presenta the screen
     SDL_RenderPresent(renderer);
@@ -94,6 +109,7 @@ int main()
             // Check if the user wants to quit
             if (e.type == SDL_QUIT) {
                 quit = true;
+                restart(&running);
             }
             if(e.type == SDL_MOUSEBUTTONUP){
                 if(e.button.button == SDL_BUTTON_LEFT){
@@ -109,4 +125,5 @@ int main()
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    
 }

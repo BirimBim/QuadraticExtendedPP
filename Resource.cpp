@@ -5,25 +5,16 @@
 
 using namespace std;
 
-void restart(bool *running, SDL_Renderer* renderer, SDL_Window* window){
-    bool loop = true;
-    while(loop == true){
-        int choice;
+void restart(bool *running){
+    int choice;
     cout << "\n\nPress:\n1.To restart: \n2.To quit: \n";
     cin >> choice;
-    if(choice==2){
-        *running = false;
-        loop = false;
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-    }else if(choice == 1){
+    if(choice == 1){
         *running = true;
-        loop = false;
+    }else if(choice == 2){
+        *running = false;
     }else{
         cout << "This is not a valid choice";
-        loop = true;
-    }
     }
 }
 
@@ -46,4 +37,8 @@ void thickPoint(SDL_Renderer* renderer, int x, int y){
     SDL_RenderDrawPoint(renderer, x-1, y+1);
     SDL_RenderDrawPoint(renderer, x+1, y+1);
     SDL_RenderDrawPoint(renderer, x-1, y-1);
+    SDL_RenderDrawPoint(renderer, x+1, y);
+    SDL_RenderDrawPoint(renderer, x-1, y);
+    SDL_RenderDrawPoint(renderer, x, y-1);
+    SDL_RenderDrawPoint(renderer, x, y+1);
 }
