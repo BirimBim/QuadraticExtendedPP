@@ -19,7 +19,7 @@ int main()
     std::cin >> a;
     std::cout << "Insert a number for the coeficient b: ";
     std::cin >> b;
-    std::cout << "Insert a number for the coesficient c: ";
+    std::cout << "Insert a number for the coeficient c: ";
     std::cin >> c;
 
     //roots are the points on which the line meets the x intercept in real quadratics
@@ -84,8 +84,10 @@ int main()
     
     //draws quadratic
     SDL_SetRenderDrawColor(renderer, 0,255,0,255);
-    int h = (b*-1)/(2*a);
-    int k = (a*(pow(h,2)))+(b*h)+c;
+    //x vertex
+    float h = (b*-1)/(2*a);
+    //y vertex
+    float k = (a*(pow(h,2)))+(b*h)+c;
     if(a > 0){
         thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
         std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
@@ -94,7 +96,11 @@ int main()
         }
     }
     if(a < 0){
-        
+        thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
+        std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
+        for(float i=k; i > -16; i-=0.5f){
+            thickPoint(renderer, coordinatesX[2], coordinatesY[i]);
+        }
     }
     
     
@@ -109,7 +115,6 @@ int main()
             // Check if the user wants to quit
             if (e.type == SDL_QUIT) {
                 quit = true;
-                restart(&running);
             }
             if(e.type == SDL_MOUSEBUTTONUP){
                 if(e.button.button == SDL_BUTTON_LEFT){
