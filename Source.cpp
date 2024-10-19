@@ -93,11 +93,16 @@ int main()
     //y intercept
     float yInter = (a*(pow(0,2)))+(b*0)+c;
     
+    float xGraph = h;
     //Upward curve
     if(a > 0){
         thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
-        for(float i=root1; i < windowHeight; i+=0.5f){
-            
+        
+        for(float y=k; y < yInter; y+=0.5f){
+            if(xGraph < h+h){
+                xGraph += 0.5f;
+            }
+            thickPoint(renderer, coordinatesX[xGraph], coordinatesY[y]);
         }
     }
     //Downward curve
@@ -109,8 +114,10 @@ int main()
     }
     
     std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
+    
     std::cout << "y-intercept: " << "(0," << yInter << ")";
-    std::cout <
+    std::cout << " (" << h+h << "," << yInter << ")" << std::endl;
+    
     std::cout << "x-intercept: " << "(" << root2 << ",0)";
     std::cout << " (" << root1 << ",0)";
     
