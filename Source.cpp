@@ -93,16 +93,18 @@ int main()
     //y intercept
     float yInter = (a*(pow(0,2)))+(b*0)+c;
     
-    float xGraph = h;
+    float xGraph = root2-0.5;
+    float yGraph;
+    float drawX, drawY;
     //Upward curve
     if(a > 0){
-        thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
-        
-        for(float y=k; y < yInter; y+=0.5f){
-            if(xGraph < h+h){
+        for(float y=k; y <= 13; y+=0.5f){
+            if(xGraph <= root1){
                 xGraph += 0.5f;
+                yGraph = (a*(pow(xGraph,2)))+(b*xGraph)+c;
+                thickPoint(renderer, coordinatesX[xGraph], coordinatesY[yGraph]);
             }
-            thickPoint(renderer, coordinatesX[xGraph], coordinatesY[y]);
+            
         }
     }
     //Downward curve
