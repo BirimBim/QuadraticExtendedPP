@@ -2,6 +2,7 @@
 #include <map>
 #include <SDL2/SDL.h>
 #include <cmath>
+#include <ostream>
 #include "Header.hpp"
 
 bool running = true;
@@ -32,6 +33,7 @@ int main()
         std::cout << "\nImaginary roots = " << root1 << " ± " << delta << "i\n";
     }else{
         std::cout << "\nError: the coeficient \"a\" cannot be = 0";
+        return -1;
     }
     
     //graph
@@ -88,21 +90,29 @@ int main()
     float h = (b*-1)/(2*a);
     //y vertex
     float k = (a*(pow(h,2)))+(b*h)+c;
+    //y intercept
+    float yInter = (a*(pow(0,2)))+(b*0)+c;
+    
+    //Upward curve
     if(a > 0){
         thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
-        std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
         for(float i=root1; i < windowHeight; i+=0.5f){
             
         }
     }
+    //Downward curve
     if(a < 0){
         thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
-        std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
         for(float i=k; i > -16; i-=0.5f){
             thickPoint(renderer, coordinatesX[2], coordinatesY[i]);
         }
     }
     
+    std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
+    std::cout << "y-intercept: " << "(0," << yInter << ")";
+    std::cout <
+    std::cout << "x-intercept: " << "(" << root2 << ",0)";
+    std::cout << " (" << root1 << ",0)";
     
     //presenta the screen
     SDL_RenderPresent(renderer);
