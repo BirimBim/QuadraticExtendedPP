@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <cmath>
 #include <ostream>
 #include "Header.hpp"
@@ -8,6 +9,7 @@
 bool running = true;
 int main()
 {
+    
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
     
@@ -36,7 +38,25 @@ int main()
         return -1;
     }
     
+    //x vertex
+    float h = (b*-1)/(2*a);
+    //y vertex
+    float k = (a*(pow(h,2)))+(b*h)+c;
+    //y intercept
+    float yInter = (a*(pow(0,2)))+(b*0)+c;
+    
+    float xGraph = root2-1;
+    float yGraph;
+    float drawX, drawY;
+    
+    std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
+    std::cout << "y-intercept: " << "(0," << yInter << ")";
+    std::cout << "(" << h+h << "," << yInter << ")" << std::endl;
+    std::cout << "x-intercept: " << "(" << root2 << ",0)";
+    std::cout << " (" << root1 << ",0)";
+    
     //graph
+    
     //initialize with error checking
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
@@ -52,10 +72,33 @@ int main()
     SDL_RenderSetScale(renderer, 1.0, 1.0);
     
     
+    //text
+    if (TTF_Init() == -1) {
+        std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
+        return -1;
+    }
+
+    TTF_Font* Font = TTF_OpenFont("GraphFont.ttf", 100);
+    if (Font == nullptr) {
+        std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+        return -1;
+    }
+    SDL_Color White = {255, 255, 255};
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Font, "In development", White);
+    SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+    
+    SDL_Rect Message_rect;
+    Message_rect.x = 0;
+    Message_rect.y = windowHeight-20;
+    Message_rect.w = 170;
+    Message_rect.h = 20;
+    
+    
+    
     // Set background color to black
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-
+    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
     
     //Grid, lets me use the alpha value to make grid opaque 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -70,6 +113,7 @@ int main()
     
     
     //makes a map to make pixels relative to points on graph
+    /* 
     std::map<float,float> coordinatesX;
     std::map<float,float> coordinatesY;
     //x
@@ -82,46 +126,28 @@ int main()
         coordinatesY[i] = (26.7*counter);
         counter+= 0.5f;
     }
-    
+    */
     
     //draws quadratic
     SDL_SetRenderDrawColor(renderer, 0,255,0,255);
-    //x vertex
-    float h = (b*-1)/(2*a);
-    //y vertex
-    float k = (a*(pow(h,2)))+(b*h)+c;
-    //y intercept
-    float yInter = (a*(pow(0,2)))+(b*0)+c;
-    
-    float xGraph = root2-0.5;
-    float yGraph;
-    float drawX, drawY;
     //Upward curve
     if(a > 0){
-        for(float y=k; y <= 13; y+=0.5f){
-            if(xGraph <= root1){
-                xGraph += 0.5f;
-                yGraph = (a*(pow(xGraph,2)))+(b*xGraph)+c;
-                thickPoint(renderer, coordinatesX[xGraph], coordinatesY[yGraph]);
-            }
-            
+        for(float y=k; y <= 13; y+=0.1f){
+            xGraph += 0.1f;
+            yGraph = (a*(pow(xGraph,2)))+(b*xGraph)+c;
+            thickPoint(renderer, xGraph*28, yGraph*18);
         }
     }
+    /* 
     //Downward curve
     if(a < 0){
-        thickPoint(renderer, coordinatesX[h], coordinatesY[k]);
-        for(float i=k; i > -16; i-=0.5f){
-            thickPoint(renderer, coordinatesX[2], coordinatesY[i]);
+        for(float y=k; y > -16; y-=0.5f){
+            xGraph -= 0.5f;
+            yGraph = (a*(pow(xGraph,2)))+(b*xGraph)+c;
+            thickPoint(renderer, coordinatesX[xGraph], coordinatesY[yGraph]);
         }
     }
-    
-    std::cout << std::endl << "Vertex: (" << h << "," << k << ")" << std::endl;
-    
-    std::cout << "y-intercept: " << "(0," << yInter << ")";
-    std::cout << " (" << h+h << "," << yInter << ")" << std::endl;
-    
-    std::cout << "x-intercept: " << "(" << root2 << ",0)";
-    std::cout << " (" << root1 << ",0)";
+    */
     
     //presenta the screen
     SDL_RenderPresent(renderer);
@@ -148,6 +174,8 @@ int main()
     //quit sdl
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
+    
     
 }
