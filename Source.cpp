@@ -4,7 +4,11 @@
 #include <SDL2/SDL_ttf.h>
 #include <cmath>
 #include <ostream>
+#include <sstream>
+#include <string>
 #include "Header.hpp"
+#include "SDL2/SDL_render.h"
+#include "SDL2/SDL_surface.h"
 
 bool running = true;
 int main()
@@ -98,7 +102,27 @@ int main()
     // Set background color to black
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+    
     SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+    SDL_FreeSurface(surfaceMessage);
+    
+    SDL_Rect grid_rect;
+    
+    grid_rect.x = 20;
+    grid_rect.y = windowHeight/2;
+    grid_rect.w = 200;
+    grid_rect.h = 200;
+    std::stringstream num;
+    //numbering graph
+    for(int i = 1; i <= 13; i++){
+        num << i;
+        SDL_Surface* numText = TTF_RenderText_Solid(Font, num.str().c_str(), White);
+        SDL_Texture* numTexture = SDL_CreateTextureFromSurface(renderer, numText);
+        SDL_RenderCopy(renderer, numTexture, NULL, &grid_rect);
+        SDL_FreeSurface(numText);
+    }
+    
+   
     
     //Grid, lets me use the alpha value to make grid opaque 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);

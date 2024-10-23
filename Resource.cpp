@@ -2,6 +2,9 @@
 #include <cmath>
 #include <SDL2/SDL.h>
 #include "Header.hpp"
+#include "SDL2/SDL_pixels.h"
+#include "SDL2/SDL_render.h"
+#include "SDL2/SDL_ttf.h"
 
 using namespace std;
 
