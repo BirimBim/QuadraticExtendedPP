@@ -108,18 +108,21 @@ int main()
     
     SDL_Rect grid_rect;
     
-    grid_rect.x = 20;
-    grid_rect.y = windowHeight/2;
-    grid_rect.w = 200;
-    grid_rect.h = 200;
+    grid_rect.x = -17;
+    grid_rect.y = (windowHeight/2)+5;
+    grid_rect.w = 15;
+    grid_rect.h = 10;
     std::stringstream num;
     //numbering graph
-    for(int i = 1; i <= 13; i++){
+    for(int i = -12; i <= 12; i++){
         num << i;
         SDL_Surface* numText = TTF_RenderText_Solid(Font, num.str().c_str(), White);
         SDL_Texture* numTexture = SDL_CreateTextureFromSurface(renderer, numText);
+        grid_rect.x += 27;
         SDL_RenderCopy(renderer, numTexture, NULL, &grid_rect);
+        
         SDL_FreeSurface(numText);
+        num.str("");
     }
     
    
@@ -154,12 +157,12 @@ int main()
     
     //draws quadratic
     SDL_SetRenderDrawColor(renderer, 0,255,0,255);
-    //Upward curve
+    //Downward curve
     if(a > 0){
         for(float y=k; y <= 13; y+=0.1f){
             xGraph += 0.1f;
-            yGraph = (a*(pow(xGraph,2)))+(b*xGraph)+c;
-            thickPoint(renderer, xGraph*28, yGraph*18);
+            yGraph = ((a*(pow(xGraph,2)))+(b*xGraph)+c);
+            thickPoint(renderer, xGraph*(-50.1), yGraph*(52.3));
         }
     }
     /* 
